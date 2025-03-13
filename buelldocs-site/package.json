@@ -1,0 +1,11 @@
+{
+  "name": "buelldocs-site",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "json-server --watch db.json --static ./public --port 3000"
+  },
+  "dependencies": {
+    "json-server": "^0.17.0",
+    "express": "^4.17.1"
+  }
+}

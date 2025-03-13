@@ -1,0 +1,103 @@
+:root {
+    --bg-primary: #0a0a0c;
+    --bg-secondary: #141418;
+    --accent-primary: #ae8e5d;
+    --accent-secondary: #3a3a42;
+    --text-primary: rgba(255, 255, 255, 0.9);
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-tertiary: rgba(255, 255, 255, 0.4);
+    --blur-amount: 10px;
+}
+
+.financial-dashboard {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 20px;
+    padding: 20px;
+    height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.service-selector {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.document-types {
+    padding: 20px;
+}
+
+.doc-type-btn {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: rgba(174, 142, 93, 0.1);
+    border: 1px solid var(--accent-primary);
+    border-radius: 5px;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.doc-type-btn:hover {
+    background: rgba(174, 142, 93, 0.2);
+}
+
+.doc-type-btn.active {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+}
+
+.document-builder {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.form-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.preview-container {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.preview-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.preview-btn {
+    background: var(--accent-secondary);
+    color: var(--text-primary);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.preview-btn:hover {
+    background: var(--accent-primary);
+}

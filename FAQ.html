@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Knowledge Base & FAQs</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/navigation.js" defer></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #141418;
+            --accent-primary: #ae8e5d;
+            --accent-secondary: #3a3a42;
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --blur-amount: 10px;
+            --card-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        header {
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            bottom: 2px;
+            right: -14px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 0;
+            transition: var(--card-transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            width: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.12) 0%, rgba(10, 10, 12, 0) 70%);
+            top: -250px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 15s infinite alternate;
+            filter: blur(30px);
+        }
+
+        .glow-secondary {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.08) 0%, rgba(10, 10, 12, 0) 70%);
+            bottom: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 12s infinite alternate-reverse;
+            filter: blur(40px);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(1.1); }
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .intro-title {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            color: var(--text-tertiary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            height: 1px;
+            width: 80px;
+            background-color: var(--accent-primary);
+        }
+
+        .kb-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        .kb-sidebar {
+            position: sticky;
+            top: 100px;
+            align-self: start;
+        }
+
+        .kb-nav {
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .kb-nav-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            background-color: rgba(30, 30, 36, 0.6);
+        }
+
+        .kb-nav-list {
+            list-style: none;
+        }
+
+        .kb-nav-category {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .kb-nav-category-title {
+            padding: 15px 20px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .kb-nav-category-title:hover {
+            background-color: rgba(174, 142, 93, 0.05);
+        }
+
+        .kb-nav-category-icon {
+            font-size: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .kb-nav-category.active .kb-nav-category-icon {
+            transform: rotate(90deg);
+        }
+
+        .kb-nav-items {
+            list-style: none;
+            padding: 0 20px 15px;
+            display: none;
+        }
+
+        .kb-nav-category.active .kb-nav-items {
+            display: block;
+        }
+
+        .kb-nav-item {
+            margin-bottom: 8px;
+        }
+
+        .kb-nav-link {
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: block;
+            padding: 6px 0 6px 15px;
+            position: relative;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .kb-nav-link::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: var(--accent-secondary);
+            position: absolute;
+            left: 0;
+            top: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .kb-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        .kb-nav-link:hover::before {
+            background-color: var(--accent-primary);
+        }
+
+        .kb-nav-link.active {
+            background-color: rgba(174, 142, 93, 0.1);
+            color: var(--text-primary);
+        }
+
+        .kb-nav-link.active::before {
+            background-color: var(--accent-primary);
+        }
+
+        .kb-content {
+            min-height: 800px;
+        }
+
+        .kb-search {
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 45px 15px 15px;
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background-color: rgba(30, 30, 36, 0.6);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 16px;
+        }
+
+        .faq-container {
+            margin-bottom: 60px;
+        }
+
+        .faq-item {
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .faq-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .faq-question {
+            padding: 20px;
+            font-size: 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background-color: rgba(30, 30, 36, 0.6);
+        }
+
+        .faq-icon {
+            font-size: 14px;
+            color: var(--accent-primary);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 20px 20px;
+            max-height: 500px;
+        }
+
+        .faq-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .faq-content p {
+            margin-bottom: 15px;
+        }
+
+        .faq-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .kb-category {
+            margin-bottom: 40px;
+        }
+
+        .kb-category-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .kb-category-description {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .article-card {
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            padding: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            background-color: rgba(30, 30, 36, 0.6);
+            border-color: rgba(174, 142, 93, 0.3);
+        }
+
+        .article-category {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .article-title {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
+        .article-excerpt {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .article-link {
+            font-size: 12px;
+            color: var(--accent-primary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            transition: color 0.3s ease;
+        }
+
+        .article-link:hover {
+            color: var(--text-primary);
+        }
+
+        .article-link::after {
+            content: "→";
+            margin-left: 5px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .article-link:hover::after {
+            margin-left: 8px;
+        }
+
+        .clearance-badge {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.3);
+            color: var(--accent-primary);
+            border-radius: 3px;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 60px;
+            padding: 40px;
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .cta-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        .cta-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.5);
+            color: var(--accent-primary);
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(174, 142, 93, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        footer {
+            padding: 40px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: relative;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(20, 20, 26, 1) 0%, rgba(10, 10, 12, 1) 70%);
+            z-index: 0;
+        }
+
+        .system-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .system-info span {
+            position: relative;
+        }
+
+        .system-info span:not(:last-child)::after {
+            content: "•";
+            position: absolute;
+            right: -12px;
+        }
+
+        @media (max-width: 768px) {
+            .faq-section {
+                padding: 1rem;
+            }
+
+            .faq-item {
+                margin-bottom: 1rem;
+            }
+
+            .faq-question {
+                padding: 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .faq-answer {
+                padding: 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            .kb-nav-category {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="backdrop"></div>
+    <div class="glow"></div>
+    <div class="glow-secondary"></div>
+
+    <header>
+        <div class="logo">BUELLDOCS</div>
+        <nav class="nav-links">
+            <a href="/about">INTELLIGENCE</a>
+            <a href="/services">OPERATIONS</a>
+            <a href="/knowledge">RESOURCES</a>
+            <a href="/register">ACCESS</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="intro">
+                <h1 class="intro-title">KNOWLEDGE BASE</h1>
+                <p class="intro-text">Navigate our operational resources for mission-critical intelligence. Understanding your strategic options enables more effective deployment and superior outcomes.</p>
+            </div>
+
+            <div class="kb-layout">
+                <div class="kb-sidebar">
+                    <div class="kb-search">
+                        <input type="text" class="search-input" placeholder="Search knowledge base...">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                    
+                    <nav class="kb-nav">
+                        <div class="kb-nav-header">RESOURCE CATEGORIES</div>
+                        <ul class="kb-nav-list">
+                            <li class="kb-nav-category active">
+                                <div class="kb-nav-category-title">
+                                    <span>Documentation Services</span>
+                                    <span class="kb-nav-category-icon">›</span>
+                                </div>
+                                <ul class="kb-nav-items">
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link active">Income Representation</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Financial Verification</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Administrative Documents</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="kb-nav-category">
+                                <div class="kb-nav-category-title">
+                                    <span>Operational Security</span>
+                                    <span class="kb-nav-category-icon">›</span>
+                                </div>
+                                <ul class="kb-nav-items">
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Privacy Protocols</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Secure Communication</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Data Purge Procedures</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="kb-nav-category">
+                                <div class="kb-nav-category-title">
+                                    <span>Digital Interventions</span>
+                                    <span class="kb-nav-category-icon">›</span>
+                                </div>
+                                <ul class="kb-nav-items">
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Deployment Protocols</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Operational Parameters</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Strategic Implementation</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="kb-nav-category">
+                                <div class="kb-nav-category-title">
+                                    <span>Account Management</span>
+                                    <span class="kb-nav-category-icon">›</span>
+                                </div>
+                                <ul class="kb-nav-items">
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Subscription Management</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Billing & Payments</a>
+                                    </li>
+                                    <li class="kb-nav-item">
+                                        <a href="#" class="kb-nav-link">Account Security</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                
+                <div class="kb-content">
+                    <div class="faq-container">
+                        <h2 class="section-title">FREQUENTLY ASKED QUESTIONS</h2>
+                        
+                        <div class="faq-item active">
+                            <div class="faq-question">
+                                <span>What is the purpose of BuellDocs' services?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-content">
+                                    <p>BuellDocs provides strategic documentation solutions designed to help individuals navigate systemic barriers and secure essential opportunities. Our services create demonstration materials for educational purposes to illustrate how various documentation systems work.</p>
+                                    <p>All materials provided are intended for educational and demonstration purposes only, helping clients understand documentation standards and presentation requirements for various applications.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How secure is my information with BuellDocs?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-content">
+                                    <p>BuellDocs employs military-grade AES-256 encryption for all client data and communications. Your information is stored in secure, isolated environments with strict access controls and is automatically purged after successful operation deployment.</p>
+                                    <p>We maintain a strict no-logs policy for sensitive operation details and utilize secure communication channels for all client interactions. Our systems are regularly audited for security compliance and vulnerability testing.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What delivery methods are available for documents?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-content">
+                                    <p>BuellDocs offers multiple secure delivery options to meet your operational requirements:</p>
+                                    <p>1. <strong>Digital Delivery:</strong> Encrypted PDF files delivered via secure download link with password protection</p>
+                                    <p>2. <strong>Physical Delivery:</strong> Professional-grade printed documents shipped in discreet packaging with tracking</p>
+                                    <p>3. <strong>Premium Rush Delivery:</strong> Expedited processing with 24-hour turnaround for mission-critical requirements</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>How do subscriptions work?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-content">
+                                    <p>BuellDocs offers flexible subscription plans designed for recurring documentation needs. Each subscription tier includes a predetermined allocation of documents delivered monthly, with premium tiers offering priority processing and additional service discounts.</p>
+                                    <p>Subscriptions can be managed through your secure client portal, where you can modify, pause, or cancel your plan at any time. All subscription changes take effect at the beginning of the next billing cycle.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <div class="faq-question">
+                                <span>What payment methods are accepted?</span>
+                                <span class="faq-icon">▼</span>
+                            </div>
+                            <div class="faq-answer">
+                                <div class="faq-content">
+                                    <p>BuellDocs accepts a variety of payment methods to ensure operational flexibility:</p>
+                                    <p>1. <strong>Credit/Debit Cards:</strong> All major credit cards are accepted through our secure payment processor</p>
+                                    <p>2. <strong>Cryptocurrency:</strong> Bitcoin, Ethereum, and Monero for enhanced privacy</p>
+                                    <p>3. <strong>Mobile Payments:</strong> Apple Pay, Google Pay, and similar services for convenience</p>
+                                    <p>All payment processing is handled through secure, encrypted channels with no sensitive payment information stored on our servers.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="kb-category">
+                        <h2 class="kb-category-title">Documentation Services</h2>
+                        <p class="kb-category-description">Comprehensive guides for our primary documentation operations, including customization options, delivery methods, and strategic implementation.</p>
+                        
+                        <div class="article-grid">
+                            <div class="article-card">
+                                <div class="article-category">Income Documentation</div>
+                                <h3 class="article-title">Understanding Paystub Structures & Requirements</h3>
+                                <p class="article-excerpt">Detailed analysis of paystub components, industry standards, and customization options for different purposes.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                            
+                            <div class="article-card">
+                                <div class="article-category">Financial Verification</div>
+                                <h3 class="article-title">Bank Statement Format Guidelines</h3>
+                                <p class="article-excerpt">Comprehensive overview of bank statement structures, verification elements, and presentation requirements.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                            
+                            <div class="article-card">
+                                <div class="article-category">Employment Verification</div>
+                                <h3 class="article-title">Crafting Effective Verification Letters</h3>
+                                <p class="article-excerpt">Key components of professional verification letters and industry-specific requirements.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                            
+                            <div class="article-card">
+                                <div class="article-category">Administrative Documentation</div>
+                                <h3 class="article-title">Lease Agreement Essentials</h3>
+                                <p class="article-excerpt">Critical elements of lease agreements, regional variations, and customization considerations.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="kb-category">
+                        <h2 class="kb-category-title">Digital Intervention Protocols <span class="clearance-badge">ALPHA CLEARANCE</span></h2>
+                        <p class="kb-category-description">Strategic implementation guidelines for digital intervention operations, including deployment parameters, timing considerations, and effectiveness metrics.</p>
+                        
+                        <div class="article-grid">
+                            <div class="article-card">
+                                <div class="article-category">Schedule Disruption</div>
+                                <h3 class="article-title">Phantom Schedule Deployment Patterns</h3>
+                                <p class="article-excerpt">Optimal timing sequences, escalation parameters, and persona development for schedule intervention operations.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                            
+                            <div class="article-card">
+                                <div class="article-category">Reputation Management</div>
+                                <h3 class="article-title">Review Intervention Methodologies</h3>
+                                <p class="article-excerpt">Strategic approach to review notification deployment, platform selection, and message calibration.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                            
+                            <div class="article-card">
+                                <div class="article-category">Communications</div>
+                                <h3 class="article-title">Professional Persona Development</h3>
+                                <p class="article-excerpt">Creating convincing professional personas with appropriate industry knowledge and communication patterns.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                            
+                            <div class="article-card">
+                                <div class="article-category">Operational Security</div>
+                                <h3 class="article-title">Digital Footprint Minimization</h3>
+                                <p class="article-excerpt">Technical protocols for maintaining operational security during digital intervention deployments.</p>
+                                <a href="#" class="article-link">Read Article</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="cta-section">
+                        <h2 class="cta-title">NEED CUSTOMIZED INTELLIGENCE?</h2>
+                        <p class="cta-text">For specific operational questions or custom implementation guidance, our secure support protocols are available to active operatives.</p>
+                        <a href="/register" class="cta-button">INITIATE CONTACT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="system-info">
+            <span>SYSTEM ID: 7A3B-X940</span>
+            <span>CLEARANCE: ALPHA</span>
+            <span>SESSION: ENCRYPTED</span>
+        </div>
+        <div>BUELLDOCS © 2025</div>
+    </footer>
+
+    <script>
+        // Simple JavaScript for FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+            });
+        });
+        
+        // Category navigation toggle
+        document.querySelectorAll('.kb-nav-category-title').forEach(title => {
+            title.addEventListener('click', () => {
+                const category = title.parentElement;
+                category.classList.toggle('active');
+            });
+        });
+    </script>
+    <script src="navigation.js"></script>
+</body>
+</html>

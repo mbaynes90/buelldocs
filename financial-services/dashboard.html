@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Financial Documentation Interface</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/financial-services.css">
+    <style>
+        @media (max-width: 768px) {
+            .financial-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .service-selector {
+                position: relative;
+                height: auto;
+            }
+
+            .document-types {
+                display: flex;
+                overflow-x: auto;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .doc-type-btn {
+                flex: 0 0 auto;
+                width: auto;
+                white-space: nowrap;
+            }
+
+            .terminal-controls {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="financial-dashboard">
+        <div class="service-selector">
+            <div class="terminal-header">
+                <div class="terminal-title">DOCUMENT.ARCHITECT</div>
+                <div class="terminal-controls">
+                    <div class="terminal-control"></div>
+                    <div class="terminal-control"></div>
+                    <div class="terminal-control"></div>
+                </div>
+            </div>
+            
+            <div class="document-types">
+                <button class="doc-type-btn active" data-type="paystub">
+                    <span class="doc-icon">📄</span>
+                    Paystub Generator
+                </button>
+                <button class="doc-type-btn" data-type="w2">
+                    <span class="doc-icon">📑</span>
+                    W-2 Architect
+                </button>
+                <button class="doc-type-btn" data-type="1099">
+                    <span class="doc-icon">📋</span>
+                    1099 Constructor
+                </button>
+            </div>
+        </div>
+
+        <div class="document-builder">
+            <div class="form-container">
+                <!-- Dynamic form will be injected here -->
+            </div>
+            
+            <div class="preview-container">
+                <div class="preview-header">
+                    <h3>DOCUMENT PREVIEW</h3>
+                    <div class="preview-controls">
+                        <button class="preview-btn" data-action="refresh">
+                            <span>↻</span> Refresh
+                        </button>
+                        <button class="preview-btn" data-action="download">
+                            <span>⬇</span> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="document-preview">
+                    <!-- Preview will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
