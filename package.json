@@ -1,0 +1,31 @@
+{
+  "name": "buelldocs",
+  "version": "1.0.0",
+  "description": "Initial upload of BuellDocs website",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js --watch src --watch public",
+    "preview": "npm run dev & open http://localhost:3000",
+    "db:create": "createdb buelldocs",
+    "db:init": "psql -d buelldocs -f database/schema.sql",
+    "db:reset": "dropdb buelldocs && npm run db:create && npm run db:init"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "helmet": "^8.0.0",
+    "pg": "^8.14.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
