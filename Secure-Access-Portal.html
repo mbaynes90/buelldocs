@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Secure Access Portal</title>
+    <link rel="stylesheet" href="/css/secure-portal.css">
+    <script src="/js/secure-portal.js" defer></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #141418;
+            --accent-primary: #ae8e5d;
+            --accent-secondary: #3a3a42;
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --blur-amount: 10px;
+            --card-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        header {
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            bottom: 2px;
+            right: -14px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 0;
+            transition: var(--card-transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            width: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.12) 0%, rgba(10, 10, 12, 0) 70%);
+            top: -250px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 15s infinite alternate;
+            filter: blur(30px);
+        }
+
+        .glow-secondary {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.08) 0%, rgba(10, 10, 12, 0) 70%);
+            bottom: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 12s infinite alternate-reverse;
+            filter: blur(40px);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(1.1); }
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            color: var(--text-tertiary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            height: 1px;
+            width: 80px;
+            background-color: var(--accent-primary);
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .intro-title {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .terminal-access {
+            background-color: rgba(20, 20, 24, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .terminal-access::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(174,142,93,0) 0%, rgba(174,142,93,0.5) 50%, rgba(174,142,93,0) 100%);
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .terminal-title {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-control {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--accent-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .terminal-control:first-child { background-color: #ff5f57; }
+        .terminal-control:nth-child(2) { background-color: #ffbd2e; }
+        .terminal-control:last-child { background-color: #28ca41; }
+
+        .terminal-content {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .code-line {
+            margin-bottom: 14px;
+            display: flex;
+        }
+
+        .prompt {
+            color: var(--accent-primary);
+            margin-right: 14px;
+        }
+
+        .typing {
+            position: relative;
+        }
+
+        .typing::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -12px;
+            width: 8px;
+            height: 18px;
+            background-color: var(--accent-primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .register-form {
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 6px;
+            max-width: 700px;
+            margin: 0 auto;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .register-form::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(174,142,93,0) 0%, rgba(174,142,93,0.5) 50%, rgba(174,142,93,0) 100%);
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .clearance-badge {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.3);
+            color: var(--accent-primary);
+            border-radius: 3px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-fullwidth {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-tertiary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background-color: rgba(174, 142, 93, 0.05);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ae8e5d' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .security-level {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .security-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-tertiary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .security-option.active {
+            background-color: rgba(174, 142, 93, 0.1);
+            color: var(--accent-primary);
+            border-bottom: 2px solid var(--accent-primary);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .form-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.05);
+            margin-right: 10px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .form-checkbox input:checked ~ .checkbox-custom {
+            border-color: var(--accent-primary);
+            background-color: rgba(174, 142, 93, 0.1);
+        }
+
+        .form-checkbox input:checked ~ .checkbox-custom::after {
+            content: "✓";
+            color: var(--accent-primary);
+            font-size: 14px;
+        }
+
+        .checkbox-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .payment-method {
+            flex: 1;
+            background-color: rgba(30, 30, 36, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-method.active {
+            border-color: var(--accent-primary);
+            background-color: rgba(174, 142, 93, 0.1);
+        }
+
+        .payment-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .payment-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .payment-method.active .payment-label {
+            color: var(--accent-primary);
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: rgba(30, 30, 36, 0.6);
+            border-radius: 4px;
+            margin: 25px 0;
+        }
+
+        .security-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--accent-primary);
+        }
+
+        .security-text {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.5);
+            color: var(--accent-primary);
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(174, 142, 93, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        footer {
+            padding: 40px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: relative;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(20, 20, 26, 1) 0%, rgba(10, 10, 12, 1) 70%);
+            z-index: 0;
+        }
+
+        .system-info {
+            display: flex;
+            gap: 20px;
+        }
+
+        .system-info span {
+            position: relative;
+        }
+
+        .system-info span:not(:last-child)::after {
+            content: "•";
+            position: absolute;
+            right: -12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="backdrop"></div>
+    <div class="glow"></div>
+    <div class="glow-secondary"></div>
+
+    <header>
+        <div class="logo">BUELLDOCS</div>
+        <nav class="nav-links">
+            <a href="/about">INTELLIGENCE</a>
+            <a href="/services">OPERATIONS</a>
+            <a href="/pricing">RESOURCES</a>
+            <a href="/register" class="active">ACCESS</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="intro">
+                <h1 class="intro-title">SECURE YOUR ACCESS</h1>
+                <p class="intro-text">Initiate your mission with BuellDocs. Provide your details below to unlock custom solutions—delivered with precision and absolute discretion. Your breakthrough starts now.</p>
+            </div>
+
+            <div class="terminal-access">
+                <div class="terminal-header">
+                    <div class="terminal-title">ACCESS.PROTOCOL</div>
+                    <div class="terminal-controls">
+                        <div class="terminal-control"></div>
+                        <div class="terminal-control"></div>
+                        <div class="terminal-control"></div>
+                    </div>
+                </div>
+                <div class="terminal-content">
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>Initializing secure registration protocol...</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>Connection established. Encryption active.</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>Ready to receive operative credentials.</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span class="typing">Awaiting input_</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="register-form">
+                <div class="form-header">
+                    <h2 class="section-title">OPERATIVE REGISTRATION</h2>
+                    <span class="clearance-badge">ENCRYPTION ACTIVE</span>
+                </div>
+                
+                <form action="/submit" method="POST">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">OPERATIVE CODE NAME</label>
+                            <input type="text" class="form-input" name="codename" placeholder="Tactical identifier" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">CLEARANCE LEVEL</label>
+                            <div class="security-level">
+                                <div class="security-option active">ALPHA</div>
+                                <div class="security-option">BETA</div>
+                                <div class="security-option">GAMMA</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">PRIMARY CHANNEL</label>
+                            <input type="email" class="form-input" name="email" placeholder="Secure email address" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">VERIFICATION CODE</label>
+                            <input type="password" class="form-input" name="password" placeholder="Access password" required>
+                        </div>
+                        
+                        <div class="form-group form-fullwidth">
+                            <label class="form-label">PRIMARY OPERATION</label>
+                            <select class="form-select" name="operation" required>
+                                <option value="" disabled selected>Select primary operation</option>
+                                <optgroup label="Documentation Services">
+                                    <option value="hustle-boost">Hustle Boost Protocol</option>
+                                    <option value="money-moves">Money Moves System</option>
+                                    <option value="superparent">Superparent Directive</option>
+                                </optgroup>
+                                <optgroup label="Digital Intervention">
+                                    <option value="phantom-schedule">Phantom Schedule Protocol</option>
+                                    <option value="review-bomber">Review Bomber Operation</option>
+                                </optgroup>
+                                <optgroup label="Physical Products">
+                                    <option value="synthetic-kit">Synthetic Specimen Kit</option>
+                                    <option value="executive-statement">Executive Statement</option>
+                                </optgroup>
+                                <optgroup label="Subscription Services">
+                                    <option value="basic-plan">Basic Documentation Plan</option>
+                                    <option value="standard-plan">Standard Documentation Suite</option>
+                                    <option value="elite-plan">Elite Documentation Protocol</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group form-fullwidth">
+                            <label class="form-label">OPERATION PARAMETERS</label>
+                            <textarea class="form-textarea" name="parameters" placeholder="Specify mission objectives, requirements, and any critical parameters for operation execution. Include target income amount, document type, timeline, or specific configuration details." required></textarea>
+                        </div>
+                        
+                        <div class="form-group form-fullwidth">
+                            <label class="form-label">PAYMENT METHOD</label>
+                            <div class="payment-methods">
+                                <div class="payment-method active">
+                                    <div class="payment-icon">💳</div>
+                                    <div class="payment-label">Credit Card</div>
+                                </div>
+                                <div class="payment-method">
+                                    <div class="payment-icon">₿</div>
+                                    <div class="payment-label">Cryptocurrency</div>
+                                </div>
+                                <div class="payment-method">
+                                    <div class="payment-icon">📱</div>
+                                    <div class="payment-label">Mobile Payment</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <label class="form-checkbox">
+                        <input type="checkbox" name="terms" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">I agree to the Operational Protocol Agreement, Privacy Policy, and acknowledge that all materials provided are for educational and demonstration purposes only.</span>
+                    </label>
+                    
+                    <label class="form-checkbox">
+                        <input type="checkbox" name="communications">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-label">I authorize secure communications regarding service updates, mission status, and operational briefings.</span>
+                    </label>
+                    
+                    <div class="security-note">
+                        <div class="security-icon">🔒</div>
+                        <div class="security-text">All communications are secured with AES-256 encryption. Your operational details will never be shared with third parties and are automatically purged from our systems after successful deployment.</div>
+                    </div>
+                    
+                    <button type="submit" class="cta-button">INITIALIZE OPERATION</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="system-info">
+            <span>SYSTEM ID: 7A3B-X940</span>
+            <span>CLEARANCE: ALPHA</span>
+            <span>SESSION: ENCRYPTED</span>
+        </div>
+        <div>BUELLDOCS © 2025</div>
+    </footer>
+</body>
+</html>

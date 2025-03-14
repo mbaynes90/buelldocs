@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Advanced Services Interface</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/advanced-services.css">
+</head>
+<body>
+    <main class="advanced-dashboard">
+        <div class="service-selector">
+            <div class="terminal-header">
+                <div class="terminal-title">ADVANCED.OPERATIONS</div>
+                <div class="clearance-indicator">ALPHA CLEARANCE REQUIRED</div>
+            </div>
+            
+            <div class="service-modules">
+                <!-- Utility Documentation Module -->
+                <div class="service-module">
+                    <h2>UTILITY DOCUMENTATION</h2>
+                    <div class="service-options">
+                        <button class="service-btn" data-service="electric_bill">
+                            <span class="service-icon">⚡</span>
+                            Electric Bill Generator
+                        </button>
+                        <button class="service-btn" data-service="water_bill">
+                            <span class="service-icon">💧</span>
+                            Water Bill Generator
+                        </button>
+                        <button class="service-btn" data-service="gas_bill">
+                            <span class="service-icon">🔥</span>
+                            Gas Bill Generator
+                        </button>
+                        <button class="service-btn" data-service="internet_bill">
+                            <span class="service-icon">🌐</span>
+                            Internet Bill Generator
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Digital Intervention Module -->
+                <div class="service-module alpha-clearance">
+                    <h2>DIGITAL INTERVENTION</h2>
+                    <div class="service-options">
+                        <button class="service-btn" data-service="calendar_override">
+                            <span class="service-icon">📅</span>
+                            Calendar Override Protocol
+                        </button>
+                        <button class="service-btn" data-service="communication_redirect">
+                            <span class="service-icon">📧</span>
+                            Communication Redirect System
+                        </button>
+                        <button class="service-btn" data-service="system_notification">
+                            <span class="service-icon">🔔</span>
+                            System Notification Manager
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Operation Configuration Panel -->
+        <div class="operation-panel">
+            <div id="configurationForm"></div>
+            <div class="operation-controls">
+                <button id="deployOperation" class="deploy-btn">DEPLOY OPERATION</button>
+                <button id="clearOperation" class="clear-btn">CLEAR</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/processors/UtilityDocumentProcessor.js"></script>
+    <script src="../js/processors/DigitalInterventionProcessor.js"></script>
+    <script src="../js/advanced-services-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Access</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #141418;
+            --accent-primary: #ae8e5d;
+            --accent-secondary: #3a3a42;
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --blur-amount: 10px;
+            --card-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        header {
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            bottom: 2px;
+            right: -14px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 0;
+            transition: var(--card-transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            width: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.12) 0%, rgba(10, 10, 12, 0) 70%);
+            top: -250px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 15s infinite alternate;
+            filter: blur(30px);
+        }
+
+        .glow-secondary {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.08) 0%, rgba(10, 10, 12, 0) 70%);
+            bottom: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 12s infinite alternate-reverse;
+            filter: blur(40px);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(1.1); }
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            color: var(--text-tertiary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            height: 1px;
+            width: 80px;
+            background-color: var(--accent-primary);
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .intro-title {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .register-form {
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 6px;
+            max-width: 600px;
+            margin: 0 auto;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .register-form::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(174,142,93,0) 0%, rgba(174,142,93,0.5) 50%, rgba(174,142,93,0) 100%);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-tertiary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23ae8e5d' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.5);
+            color: var(--accent-primary);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(174, 142, 93, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        footer {
+            padding: 40px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: relative;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(20, 20, 26, 1) 0%, rgba(10, 10, 12, 1) 70%);
+            z-index: 0;
+        }
+
+        .system-info span:not(:last-child)::after {
+            content: "•";
+            margin: 0 10px;
+        }
+
+        @media (max-width: 768px) {
+            .register-form {
+                padding: 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1rem;
+            }
+
+            .form-input,
+            .form-select,
+            .form-textarea {
+                padding: 0.8rem;
+                font-size: 14px;
+            }
+
+            .intro {
+                padding: 1rem;
+            }
+
+            .intro-title {
+                font-size: 1.8rem;
+            }
+
+            .intro-text {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="backdrop"></div>
+    <div class="glow"></div>
+    <div class="glow-secondary"></div>
+
+    <header>
+        <div class="logo">BUELLDOCS</div>
+        <nav class="nav-links">
+            <a href="/about">INTELLIGENCE</a>
+            <a href="/services">OPERATIONS</a>
+            <a href="/pricing">RESOURCES</a>
+            <a href="/register">ACCESS</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="intro">
+                <h1 class="intro-title">SECURE YOUR ACCESS</h1>
+                <p class="intro-text">Initiate your mission with BuellDocs. Provide your details below to unlock custom solutions—delivered with precision and absolute discretion. Your breakthrough starts now.</p>
+            </div>
+
+            <div class="register-form">
+                <h2 class="section-title">ACCESS PROTOCOL</h2>
+                <form action="/submit" method="POST">
+                    <div class="form-group">
+                        <label class="form-label">OPERATIVE NAME</label>
+                        <input type="text" class="form-input" name="name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">COMMUNICATION CHANNEL</label>
+                        <input type="email" class="form-input" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">SECURE PASSWORD</label>
+                        <input type="password" class="form-input" name="password" placeholder="Enter password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">CONFIRM PASSWORD</label>
+                        <input type="password" class="form-input" name="passwordConfirm" placeholder="Confirm password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">OPERATION SELECTION</label>
+                        <select class="form-select" name="service" required>
+                            <option value="" disabled selected>Select your operation</option>
+                            <option value="hustle-boost">Hustle Boost Protocol</option>
+                            <option value="money-moves">Money Moves System</option>
+                            <option value="superparent">Superparent Directive</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">MISSION OBJECTIVES</label>
+                        <textarea class="form-textarea" name="details" placeholder="Describe your needs" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button">SUBMIT ACCESS REQUEST</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="system-info">
+            <span>SYSTEM ID: 7A3B-X940</span>
+            <span>CLEARANCE: ALPHA</span>
+            <span>SESSION: ENCRYPTED</span>
+        </div>
+        <div>BUELLDOCS © 2025</div>
+    </footer>
+    <script src="navigation.js"></script>
+</body>
+</html>

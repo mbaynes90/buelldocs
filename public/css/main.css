@@ -1,0 +1,95 @@
+/* Form validation styles */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.error-message {
+    color: #ff3e3e;
+    font-size: 0.8rem;
+    position: absolute;
+    bottom: -1.2rem;
+    left: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideIn 0.3s forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+input.invalid,
+textarea.invalid,
+select.invalid {
+    border-color: #ff3e3e;
+    background-color: rgba(255, 62, 62, 0.05);
+}
+
+/* Notification system */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 4px;
+    color: white;
+    z-index: 1000;
+    animation: slideInRight 0.3s forwards;
+}
+
+.notification.success {
+    background-color: #2ecc71;
+}
+
+.notification.error {
+    background-color: #e74c3c;
+}
+
+.notification.info {
+    background-color: #3498db;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Enhanced navigation styles */
+.nav-links a {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: currentColor;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a.active {
+    color: #00ff9d;
+}
+
+.nav-links a.active::after {
+    width: 100%;
+    background-color: #00ff9d;
+}

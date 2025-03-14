@@ -1,0 +1,224 @@
+// Show dashboard, hide login form
+            document.querySelector('.login-form').style.display = 'none';
+            document.querySelector('.user-dashboard').style.display = 'block';
+            
+            // Update last login time
+            document.getElementById('last-login').textContent = new Date().toLocaleString();
+        }
+        
+        // Function to handle logout
+        function handleLogout() {
+            // Clear user data from localStorage
+            localStorage.removeItem('user_email');
+            localStorage.removeItem('last_login');
+            
+            // Show login form, hide dashboard
+            document.querySelector('.login-form').style.display = 'block';
+            document.querySelector('.user-dashboard').style.display = 'none';
+            
+            showAlert('You have been securely logged out', 'success');
+        }
+        
+        // Function to load user data from localStorage
+        function loadUserData() {
+            const userEmail = localStorage.getItem('user_email');
+            const lastLogin = localStorage.getItem('last_login');
+            
+            if (userEmail) {
+                // Update UI with user data
+                document.querySelector('.user-email').textContent = userEmail;
+                
+                if (lastLogin) {
+                    document.getElementById('last-login').textContent = new Date(lastLogin).toLocaleString();
+                }
+                
+                // Load mock orders (in a real app, this would call the API)
+                loadMockOrders();
+                
+                // Show dashboard, hide login form
+                document.querySelector('.login-form').style.display = 'none';
+                document.querySelector('.user-dashboard').style.display = 'block';
+            }
+        }
+        
+        // Function to load mock orders
+        function loadMockOrders() {
+            // In a real implementation, this would fetch from an API
+            const mockOrders = [
+                {
+                    id: 'OP-7829',
+                    service: 'Hustle Boost Protocol',
+                    status: 'active',
+                    createdAt: '2025-03-12T14:22:00',
+                    details: 'Custom paystubs and employment verification letter for housing application.'
+                },
+                {
+                    id: 'OP-7815',
+                    service: 'Money Moves System',
+                    status: 'pending',
+                    createdAt: '2025-03-10T09:15:00',
+                    details: 'Bank statement customization for loan approval.'
+                },
+                {
+                    id: 'OP-7801',
+                    service: 'Superparent Directive',
+                    status: 'completed',
+                    createdAt: '2025-03-05T16:30:00',
+                    details: 'Lease agreement and childcare documentation.'
+                }
+            ];
+            
+            displayOrders(mockOrders);
+        }
+        
+        // Function to display orders
+        function displayOrders(orders) {
+            const ordersList = document.getElementById('orders-list');
+            ordersList.innerHTML = '';
+            
+            if (!orders || orders.length === 0) {
+                ordersList.innerHTML = '<p>No operations found. Start by creating a new operation.</p>';
+                return;
+            }
+            
+            orders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'order-card';
+                
+                orderCard.innerHTML = `
+                    <div class="order-header">
+                        <h3>${order.service}</h3>
+                        <span class="order-status status-${order.status}">${order.status}</span>
+                    </div>
+                    <div class="order-id">Order ID: ${order.id}</div>
+                    <div class="order-date">Created: ${new Date(order.createdAt).toLocaleDateString()}</div>
+                    <div class="order-details">${order.details}</div>
+                    <div class="order-actions">
+                        <button class="action-button view-button" data-id="${order.id}">View Details</button>
+                    </div>
+                `;
+                
+                ordersList.appendChild(orderCard);
+                
+                // Add event listener to the view button
+                const viewButton = orderCard.querySelector('.view-button');
+                viewButton.addEventListener('click', () => {
+                    // Find the order by ID
+                    const order = orders.find(o => o.id === viewButton.dataset.id);
+                    showOrderDetails(order);
+                });
+            });
+        }
+        
+        // Function to show order details in a modal
+        function showOrderDetails(order) {
+            // Create modal element
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Operation Details</h2>
+                        <button class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="detail-item">
+                            <span class="detail-label">Order ID</span>
+                            <span class="detail-value">${order.id}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Service</span>
+                            <span class="detail-value">${order.service}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Status</span>
+                            <span class="detail-value status-${order.status}">${order.status.toUpperCase()}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Created</span>
+                            <span class="detail-value">${new Date(order.createdAt).toLocaleString()}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Details</span>
+                            <span class="detail-value">${order.details}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Estimated Completion</span>
+                            <span class="detail-value">${order.status === 'completed' ? 'Completed' : 'March 15, 2025'}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="action-button close-modal">Close</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add event listeners for closing the modal
+            const closeButton = modal.querySelector('.close-button');
+            const closeModalButton = modal.querySelector('.close-modal');
+            
+            closeButton.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            closeModalButton.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            // Close modal when clicking outside the content
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            });
+        }
+        
+        // Function to show alerts
+        function showAlert(message, type) {
+            // Create alert element
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            document.body.appendChild(alert);
+            
+            // Remove alert after 3 seconds
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(alert);
+                }, 300);
+            }, 3000);
+        }
+        
+        // Add event listeners when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Login form submit handler
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', handleLogin);
+            }
+            
+            // Logout button handler
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', handleLogout);
+            }
+            
+            // New order button handler
+            const newOrderButton = document.getElementById('new-order-button');
+            if (newOrderButton) {
+                newOrderButton.addEventListener('click', () => {
+                    window.location.href = 'register.html';
+                });
+            }
+            
+            // Check if user is already logged in
+            loadUserData();
+        });
+    </script>
+</body>
+</html>

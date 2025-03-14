@@ -1,0 +1,70 @@
+
+.service-hierarchy {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.service-category {
+    border-bottom: 1px solid var(--accent-secondary);
+}
+
+.category-header {
+    padding: 15px;
+    background: rgba(174, 142, 93, 0.1);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.category-header:hover {
+    background: rgba(174, 142, 93, 0.2);
+}
+
+.clearance-badge {
+    font-size: 0.8em;
+    padding: 2px 8px;
+    background: var(--accent-primary);
+    border-radius: 3px;
+    color: var(--bg-primary);
+}
+
+.service-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.service-list.expanded {
+    max-height: 500px;
+}
+
+.service-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.service-item:hover {
+    background: rgba(174, 142, 93, 0.1);
+}
+
+.service-item.active {
+    background: var(--accent-primary);
+    color: var(--bg-primary);
+}
+
+.service-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

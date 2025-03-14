@@ -1,0 +1,48 @@
+.dev-grid {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        linear-gradient(90deg, 
+            rgba(255,0,0,0.1) 1px, 
+            transparent 1px
+        ),
+        linear-gradient(rgba(255,0,0,0.1) 1px, 
+            transparent 1px
+        );
+    background-size: 8px 8px;
+    pointer-events: none;
+    z-index: 9998;
+    display: none;
+}
+
+.dev-grid.active {
+    display: block;
+}
+
+/* Dark mode preview */
+body.dark-preview {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+/* Responsive preview borders */
+body.preview-mode {
+    border: 2px solid #ff3e00;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    body.preview-mode {
+        border-color: #00a2ff;
+    }
+}
+
+@media (max-width: 375px) {
+    body.preview-mode {
+        border-color: #00ff88;
+    }
+}

@@ -1,0 +1,163 @@
+:root {
+    --primary-dark: #0a0a0a;
+    --accent-gold: #FFD700;
+    --terminal-green: #00ff9d;
+    --alpha-red: #ff3b3b;
+    --beta-blue: #0077ff;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.command-center {
+    background: var(--primary-dark);
+    min-height: 100vh;
+    padding: 2rem;
+    color: var(--terminal-green);
+}
+
+.command-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+}
+
+.status-panel {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.status-indicator.alpha {
+    background: rgba(255, 59, 59, 0.1);
+    border: 1px solid var(--alpha-red);
+    color: var(--alpha-red);
+}
+
+.status-indicator.beta {
+    background: rgba(0, 119, 255, 0.1);
+    border: 1px solid var(--beta-blue);
+    color: var(--beta-blue);
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.service-module {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-module:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 255, 157, 0.1);
+}
+
+.module-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.service-category {
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: var(--accent-gold);
+}
+
+.service-title {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+    color: var(--terminal-green);
+}
+
+.service-description {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    opacity: 0.8;
+}
+
+.deploy-btn {
+    width: 100%;
+    padding: 0.8rem;
+    background: transparent;
+    border: 1px solid var(--terminal-green);
+    color: var(--terminal-green);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deploy-btn:hover {
+    background: var(--terminal-green);
+    color: var(--primary-dark);
+}
+
+.active-operations-panel {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.operation-item {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 1rem;
+    margin: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: var(--terminal-green);
+    transition: width 0.3s ease;
+}
+
+/* Additional styles for modals, animations, and responsive design... */

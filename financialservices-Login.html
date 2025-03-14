@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs</title>
+    <style>
+        :root {
+            --bg-primary: #0d0d12;
+            --bg-secondary: #16161a;
+            --accent-primary: #ae8e5d;
+            --accent-secondary: #3d3d46;
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --blur-amount: 12px;
+            --card-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        header {
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: rgba(13, 13, 18, 0.9);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            position: relative;
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            bottom: 2px;
+            right: -14px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 0;
+            transition: var(--card-transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            width: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 100px 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.15) 0%, rgba(13, 13, 18, 0) 70%);
+            top: -250px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 15s infinite alternate;
+            filter: blur(40px);
+        }
+
+        .glow-secondary {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.10) 0%, rgba(13, 13, 18, 0) 70%);
+            bottom: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 12s infinite alternate-reverse;
+            filter: blur(50px);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0.3; transform: scale(1.1); }
+        }
+
+        .terminal {
+            background-color: rgba(22, 22, 26, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            position: relative;
+            margin-bottom: 80px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .terminal::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(174,142,93,0) 0%, rgba(174,142,93,0.6) 50%, rgba(174,142,93,0) 100%);
+        }
+
+        .terminal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .terminal-title {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--accent-secondary);
+            transition: background-color 0.3s ease;
+        }
+
+        .terminal-control:first-child { background-color: #ff5f57; }
+        .terminal-control:nth-child(2) { background-color: #ffbd2e; }
+        .terminal-control:last-child { background-color: #28ca41; }
+
+        .terminal-control:hover { opacity: 0.8; }
+
+        .terminal-content {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .code-line { margin-bottom: 14px; display: flex; }
+        .prompt { color: var(--accent-primary); margin-right: 14px; }
+        .typing::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: -12px;
+            width: 8px;
+            height: 18px;
+            background-color: var(--accent-primary);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 40px;
+            color: var(--text-tertiary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            height: 1px;
+            width: 80px;
+            background-color: var(--accent-primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .card {
+            background-color: rgba(22, 22, 26, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 40px;
+            border-radius: 6px;
+            transition: var(--card-transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            background-color: rgba(25, 25, 30, 0.7);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(174,142,93,0) 0%, rgba(174,142,93,0.6) 50%, rgba(174,142,93,0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card-title { font-size: 18px; margin-bottom: 20px; font-weight: 500; color: var(--text-primary); }
+        .card-content { font-size: 14px; line-height: 1.8; color: var(--text-tertiary); margin-bottom: 25px; }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-primary);
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .status-dot::after {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border-radius: 50%;
+            border: 1px solid var(--accent-primary);
+            opacity: 0.5;
+            animation: pulse-ring 3s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            80%, 100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .service-category { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-primary); margin-bottom: 15px; opacity: 0.8; }
+        .badge { display: inline-block; padding: 4px 8px; background-color: rgba(174, 142, 93, 0.1); border: 1px solid rgba(174, 142, 93, 0.3); border-radius: 3px; font-size: 10px; letter-spacing: 1px; color: var(--accent-primary); margin-top: 15px; }
+        .action-btn { display: inline-block; padding: 8px 16px; background-color: rgba(174, 142, 93, 0.1); border: 1px solid rgba(174, 142, 93, 0.3); color: var(--accent-primary); font-size: 12px; letter-spacing: 1px; text-decoration: none; border-radius: 3px; transition: all 0.3s ease; margin-top: 20px; }
+        .action-btn:hover { background-color: rgba(174, 142, 93, 0.2); border-color: rgba(174, 142, 93, 0.5); }
+        .view-all { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-tertiary); text-decoration: none; transition: all 0.3s ease; }
+        .view-all:hover { color: var(--text-primary); }
+        .view-all::after { content: "→"; margin-left: 8px; transition: margin 0.3s ease; }
+        .view-all:hover::after { margin-left: 12px; }
+
+        footer {
+            padding: 40px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            background-color: rgba(13, 13, 18, 0.9);
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(22, 22, 26, 1) 0%, rgba(13, 13, 18, 1) 70%);
+            z-index: 0;
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 0 20px; }
+            .main-content { padding: 60px 20px; }
+            .grid { grid-template-columns: 1fr; }
+            .nav-links { gap: 20px; }
+            footer { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="backdrop"></div>
+    <div class="glow"></div>
+    <div class="glow-secondary"></div>
+
+    <header>
+        <div class="logo">BUELLDOCS</div>
+        <nav class="nav-links">
+            <a href="#">Documentation</a>
+            <a href="#">Services</a>
+            <a href="#">Protocols</a>
+            <a href="#">Access</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-title">SECURE.ACCESS</div>
+                    <div class="terminal-controls">
+                        <div class="terminal-control"></div>
+                        <div class="terminal-control"></div>
+                        <div class="terminal-control"></div>
+                    </div>
+                </div>
+                <div class="terminal-content">
+                    <div class="code-line"><span class="prompt">></span><span>Initializing secure connection...</span></div>
+                    <div class="code-line"><span class="prompt">></span><span>Authentication verified.</span></div>
+                    <div class="code-line"><span class="prompt">></span><span>Clearance level: ALPHA</span></div>
+                    <div class="code-line"><span class="prompt">></span><span>Network status: SECURE</span></div>
+                    <div class="code-line"><span class="prompt">></span><span>Access granted.</span></div>
+                    <div class="code-line"><span class="prompt">></span><span class="typing">_</span></div>
+                </div>
+            </div>
+
+            <div class="services-header">
+                <h2 class="section-title">PREMIUM SERVICES</h2>
+                <a href="#" class="view-all">View All Services</a>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="service-category">Financial Documentation</div>
+                    <h3 class="card-title">Paystub Generation</h3>
+                    <p class="card-content">Custom paystubs, W-2 forms, and employment verification for housing and loan applications. Precision-engineered for discretion.</p>
+                    <div class="service-detail"><span>From $45</span><span>Digital & Physical</span></div>
+                    <a href="#" class="action-btn">Access Service</a>
+                    <div class="status-indicator"><div class="status-dot"></div><span>AVAILABLE</span></div>
+                </div>
+
+                <div class="card">
+                    <div class="service-category">Economic Documentation</div>
+                    <h3 class="card-title">Financial Verification</h3>
+                    <p class="card-content">Bank statement adjustments, proof of funds, and verification documents for high-stakes applications.</p>
+                    <div class="service-detail"><span>From $35</span><span>Digital & Physical</span></div>
+                    <a href="#" class="action-btn">Access Service</a>
+                    <div class="status-indicator"><div class="status-dot"></div><span>AVAILABLE</span></div>
+                </div>
+
+                <div class="card">
+                    <div class="service-category">Administrative Documentation</div>
+                    <h3 class="card-title">Custom Agreements</h3>
+                    <p class="card-content">Tailored lease agreements and certifications for professional use. Discreet and authoritative.</p>
+                    <div class="service-detail"><span>From $25</span><span>Digital & Physical</span></div>
+                    <a href="#" class="action-btn">Access Service</a>
+                    <div class="status-indicator"><div class="status-dot"></div><span>AVAILABLE</span></div>
+                </div>
+            </div>
+
+            <div class="services-grid">
+                <div class="services-header">
+                    <h2 class="section-title">SUBSCRIPTION PLANS</h2>
+                    <a href="#" class="view-all">View All Plans</a>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <div class="service-category">Monthly Subscription</div>
+                        <h3 class="card-title">Basic Tier</h3>
+                        <p class="card-content">Access to 2 paystubs monthly. Priority processing for essential documentation needs.</p>
+                        <div class="badge">$29/month</div>
+                        <a href="#" class="action-btn">Subscribe</a>
+                    </div>
+
+                    <div class="card">
+                        <div class="service-category">Monthly Subscription</div>
+                        <h3 class="card-title">Standard Tier</h3>
+                        <p class="card-content">6 paystubs, employment verification, and additional documents monthly. Enhanced security protocols.</p>
+                        <div class="badge">$79/month</div>
+                        <a href="#" class="action-btn">Subscribe</a>
+                    </div>
+
+                    <div class="card">
+                        <div class="service-category">Monthly Subscription</div>
+                        <h3 class="card-title">Elite Tier</h3>
+                        <p class="card-content">Unlimited documentation with priority processing and exclusive access to advanced services.</p>
+                        <div class="badge">$199/month</div>
+                        <a href="#" class="action-btn">Subscribe</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="system-info">
+            <span>SYSTEM ID: 7A3B-X940</span>
+            <span>CLEARANCE: ALPHA</span>
+            <span>SESSION: ENCRYPTED</span>
+        </div>
+        <div>BUELLDOCS © 2025</div>
+    </footer>
+</body>
+</html>

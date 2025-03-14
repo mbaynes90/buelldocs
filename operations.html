@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Complete Operations</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #141418;
+            --accent-primary: #ae8e5d;
+            --accent-secondary: #3a3a42;
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --blur-amount: 10px;
+            --card-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        header {
+            height: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 60px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            color: var(--text-primary);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-primary);
+            bottom: 2px;
+            right: -14px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 8px 0;
+            transition: var(--card-transition);
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            width: 0;
+            background-color: var(--accent-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 60px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.12) 0%, rgba(10, 10, 12, 0) 70%);
+            top: -250px;
+            right: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 15s infinite alternate;
+            filter: blur(30px);
+        }
+
+        .glow-secondary {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(174, 142, 93, 0.08) 0%, rgba(10, 10, 12, 0) 70%);
+            bottom: -200px;
+            left: -200px;
+            border-radius: 50%;
+            z-index: 1;
+            animation: pulse 12s infinite alternate-reverse;
+            filter: blur(40px);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(1.1); }
+        }
+
+        .section-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: var(--text-tertiary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            height: 1px;
+            width: 80px;
+            background-color: var(--accent-primary);
+        }
+
+        .category-header {
+            margin-top: 60px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .category-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .intro-title {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .intro-text {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .clearance-badge {
+            display: inline-block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.3);
+            color: var(--accent-primary);
+            border-radius: 3px;
+            margin-left: 15px;
+            vertical-align: middle;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: rgba(174, 142, 93, 0.1);
+            border: 1px solid rgba(174, 142, 93, 0.5);
+            color: var(--accent-primary);
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(174, 142, 93, 0.2);
+            border-color: var(--accent-primary);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .service-card {
+            background-color: rgba(20, 20, 24, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 6px;
+            transition: var(--card-transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            background-color: rgba(25, 25, 30, 0.6);
+        }
+
+        .service-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(174,142,93,0) 0%, rgba(174,142,93,0.5) 50%, rgba(174,142,93,0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-category {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+
+        .service-title {
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .service-description {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .service-features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .service-features li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .service-features li::before {
+            content: ">";
+            color: var(--accent-primary);
+            position: absolute;
+            left: 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .service-cta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .service-price {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .show-more {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 60px;
+        }
+
+        footer {
+            padding: 40px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 2px;
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            position: relative;
+            z-index: 10;
+            background-color: rgba(10, 10, 12, 0.8);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(20, 20, 26, 1) 0%, rgba(10, 10, 12, 1) 70%);
+            z-index: 0;
+        }
+
+        .system-info span:not(:last-child)::after {
+            content: "•";
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="backdrop"></div>
+    <div class="glow"></div>
+    <div class="glow-secondary"></div>
+
+    <header>
+        <div class="logo">BUELLDOCS</div>
+        <nav class="nav-links">
+            <a href="/about">INTELLIGENCE</a>
+            <a href="/services">OPERATIONS</a>
+            <a href="/pricing">RESOURCES</a>
+            <a href="/register">ACCESS</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="intro">
+                <h1 class="intro-title">OPERATIONAL DEPLOYMENT</h1>
+                <p class="intro-text">Precision-engineered solutions to unlock housing, financial leverage, and family stability. Select your operation and deploy with confidence—discreet, fast, and tailored to your mission.</p>
+            </div>
+
+            <!-- DOCUMENTATION SERVICES -->
+            <div class="category-header">
+                <h2 class="category-title">DOCUMENTATION SERVICES</h2>
+                <p class="category-description">Strategic document solutions to navigate systemic barriers and secure essential opportunities.</p>
+            </div>
+
+            <div class="services">
+                <h2 class="section-title">INCOME REPRESENTATION</h2>
+                <div class="service-grid">
+                    <div class="service-card">
+                        <div class="service-category">INCOME ARCHITECTURE</div>
+                        <h3 class="service-title">Hustle Boost Protocol</h3>
+                        <p class="service-description">Secure housing, loans, or jobs with custom income documentation—crafted to your exact specifications.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Paystubs reflecting your desired income</li>
+                                <li>W-2s and employment verification letters</li>
+                                <li>48-hour delivery for urgent needs</li>
+                                <li>Encrypted files for maximum privacy</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $10</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">FINANCIAL ENGINEERING</div>
+                        <h3 class="service-title">Money Moves System</h3>
+                        <p class="service-description">Break financial barriers with optimized bank statements and proof of funds, designed for real estate, credit, or approvals.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Custom bank statements with realistic details</li>
+                                <li>Proof of funds letters for any amount</li>
+                                <li>48-hour turnaround option</li>
+                                <li>Secure, discreet delivery</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $35</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">ADMINISTRATIVE COMMAND</div>
+                        <h3 class="service-title">Superparent Directive</h3>
+                        <p class="service-description">Navigate systemic challenges with tailored documentation for housing stability, childcare, and assistance programs.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Custom lease agreements for rentals</li>
+                                <li>Doctor's notes for medical needs</li>
+                                <li>Professional certifications</li>
+                                <li>Rapid 48-hour processing available</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $25</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIGITAL INTERVENTION SERVICES -->
+            <div class="category-header">
+                <h2 class="category-title">DIGITAL INTERVENTION SERVICES <span class="clearance-badge">ALPHA CLEARANCE</span></h2>
+                <p class="category-description">Strategic digital operations designed to redirect resources or create advantageous circumstances through targeted communications.</p>
+            </div>
+
+            <div class="services">
+                <h2 class="section-title">DIGITAL COMMUNICATIONS</h2>
+                <div class="service-grid">
+                    <div class="service-card">
+                        <div class="service-category">SCHEDULE DISRUPTION</div>
+                        <h3 class="service-title">Phantom Schedule Protocol</h3>
+                        <p class="service-description">Strategic deployment of calendar invitations to create the impression of overwhelming demand on target's schedule.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Customized to target's industry</li>
+                                <li>Escalating urgency pattern</li>
+                                <li>Realistic sender personas</li>
+                                <li>Delivery tracking analytics</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $99</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">REPUTATION MANAGEMENT</div>
+                        <h3 class="service-title">Review Bomber Operation</h3>
+                        <p class="service-description">Targeted notification campaign creating the impression of negative reviews across professional platforms.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Realistic review platform notifications</li>
+                                <li>Convincing headline generation</li>
+                                <li>Timed deployment sequence</li>
+                                <li>Email open tracking</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $129</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">PROFESSIONAL DISTRACTION</div>
+                        <h3 class="service-title">Phantom Professional</h3>
+                        <p class="service-description">Deployment of a fictional professional persona to create an ongoing email engagement requiring attention and response.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Industry-specific persona creation</li>
+                                <li>Sequential email campaign</li>
+                                <li>Increasingly familiar tone</li>
+                                <li>Optional response handling</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $149</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">TELECOMMUNICATIONS</h2>
+                <div class="service-grid">
+                    <div class="service-card">
+                        <div class="service-category">CALL MANAGEMENT</div>
+                        <h3 class="service-title">Orchestrated Miscommunication</h3>
+                        <p class="service-description">Targeted voice communications campaign creating a pattern of business inquiries requiring attention and follow-up.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Custom scenario development</li>
+                                <li>Professional voice talent</li>
+                                <li>Caller ID spoofing technology</li>
+                                <li>Deployment tracking dashboard</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $199</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">MAIL MANAGEMENT</div>
+                        <h3 class="service-title">Mail Subscription Chaos</h3>
+                        <p class="service-description">Strategic deployment of legitimate free sample and catalog requests to create ongoing physical mail volume.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Access to extensive subscription database</li>
+                                <li>Staggered submission timeline</li>
+                                <li>Volume control options</li>
+                                <li>Completion tracking</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $149</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PHYSICAL PRODUCTS -->
+            <div class="category-header">
+                <h2 class="category-title">PHYSICAL PRODUCT SYSTEMS <span class="clearance-badge">BETA CLEARANCE</span></h2>
+                <p class="category-description">Specialized physical products created for educational purposes and strategic deployment.</p>
+            </div>
+
+            <div class="services">
+                <h2 class="section-title">EDUCATIONAL MATERIALS</h2>
+                <div class="service-grid">
+                    <div class="service-card">
+                        <div class="service-category">TESTING EDUCATION</div>
+                        <h3 class="service-title">Synthetic Specimen Kit</h3>
+                        <p class="service-description">Laboratory-grade synthetic urine kit for educational demonstration of testing procedures.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Premium lab-grade formula</li>
+                                <li>Temperature maintenance system</li>
+                                <li>Comprehensive educational materials</li>
+                                <li>Discreet packaging and delivery</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $65</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">EXECUTIVE MESSAGING</div>
+                        <h3 class="service-title">Executive Statement</h3>
+                        <p class="service-description">Premium delivery of synthetic waste replica in professional packaging for making a memorable impression.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Realistic synthetic replica</li>
+                                <li>Premium packaging materials</li>
+                                <li>Optional custom message card</li>
+                                <li>Priority discreet shipping</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $49.99</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAREER ADVANCEMENT -->
+            <div class="category-header">
+                <h2 class="category-title">CAREER ADVANCEMENT SERVICES</h2>
+                <p class="category-description">Strategic career support services designed to optimize professional advancement opportunities.</p>
+            </div>
+
+            <div class="services">
+                <h2 class="section-title">PROFESSIONAL REFERENCES</h2>
+                <div class="service-grid">
+                    <div class="service-card">
+                        <div class="service-category">REFERENCE SOLUTIONS</div>
+                        <h3 class="service-title">Professional Reference Calls</h3>
+                        <p class="service-description">Strategic professional reference delivery to hiring managers from "previous employers" with tailored recommendations.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Custom reference script development</li>
+                                <li>Professional voice talent</li>
+                                <li>Industry-specific knowledge integration</li>
+                                <li>Follow-up support if needed</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $49</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">ENDORSEMENT OPERATIONS</div>
+                        <h3 class="service-title">Endorsement Letter Delivery</h3>
+                        <p class="service-description">Strategic delivery of professional recommendation letters on company letterhead to hiring managers.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Industry-specific letter development</li>
+                                <li>Professional letterhead design</li>
+                                <li>Physical and digital options</li>
+                                <li>Tracking confirmation</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">Starting at $79</span>
+                            <a href="/register" class="cta-button">DEPLOY</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUBSCRIPTION SERVICES -->
+            <div class="category-header">
+                <h2 class="category-title">SUBSCRIPTION SERVICES</h2>
+                <p class="category-description">Ongoing documentation and support services with regular delivery and priority processing.</p>
+            </div>
+
+            <div class="services">
+                <h2 class="section-title">MONTHLY PACKAGES</h2>
+                <div class="service-grid">
+                    <div class="service-card">
+                        <div class="service-category">BASIC PLAN</div>
+                        <h3 class="service-title">Core Documentation Subscription</h3>
+                        <p class="service-description">Regular monthly delivery of essential documentation with discount on additional services.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>2 paystubs monthly</li>
+                                <li>10% discount on all additional services</li>
+                                <li>Standard support channel access</li>
+                                <li>Monthly service rotation options</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">$29/month</span>
+                            <a href="/register" class="cta-button">SUBSCRIBE</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">STANDARD PLAN</div>
+                        <h3 class="service-title">Professional Documentation Suite</h3>
+                        <p class="service-description">Comprehensive monthly documentation package with expanded service options and priority support.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>6 paystubs monthly</li>
+                                <li>1 doctor's note monthly</li>
+                                <li>1 employment verification letter</li>
+                                <li>15% discount on additional services</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">$79/month</span>
+                            <a href="/register" class="cta-button">SUBSCRIBE</a>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-category">ELITE PLAN</div>
+                        <h3 class="service-title">Executive Documentation Protocol</h3>
+                        <p class="service-description">Premium unlimited documentation service with priority processing and VIP support access.</p>
+                        <div class="service-features">
+                            <ul>
+                                <li>Unlimited standard documents</li>
+                                <li>Priority 24-hour processing</li>
+                                <li>VIP support channel access</li>
+                                <li>25% discount on intervention services</li>
+                            </ul>
+                        </div>
+                        <div class="service-cta">
+                            <span class="service-price">$199/month</span>
+                            <a href="/register" class="cta-button">SUBSCRIBE</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="show-more">
+                <a href="/register" class="cta-button">SHOW ALL OPERATIONS</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="system-info">
+            <span>SYSTEM ID: 7A3B-X940</span>
+            <span>CLEARANCE: ALPHA</span>
+            <span>SESSION: ENCRYPTED</span>
+        </div>
+        <div>BUELLDOCS © 2025</div>
+    </footer>
+    <script src="navigation.js"></script>
+</body>
+</html>
