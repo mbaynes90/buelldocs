@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuellDocs - Secure Documentation Solutions</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0c;
+            --bg-secondary: #141418;
+            --accent-primary: #ae8e5d;
+            --accent-secondary: #3a3a42;
+            --text-primary: rgba(255, 255, 255, 0.9);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --blur-amount: 10px;
+            --card-transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyBAMAAADsEZWCAAAAGFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANyHj2AAAACHRSTlMABQgNEBQYHSbBj/gAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTnU1rJkAAAAnklEQVQ4y2NgoCowYmBgkHYvYGBg0PYvYGBgMPYvYGBgcPYvYGBgCPYvYGBgSPYvYGBgKPYvYGBgaPYvYGBg6PYvYGBgmPYvYGBg2PYvYGBg+PYvYGBguPYvYGBg+PYvYGBghPIZGBihfAYGRiifgYERymcEA0YonxEMGKF8RjBghPIZwYARymcEA0YonxEMGKF8RjBghPIZwYARymeEAABx7wqv0jzxrwAAAABJRU5ErkJggg==');
+            opacity: 0.05;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(20, 20, 26, 1) 0%, rgba(10, 10, 12, 1) 70%);
+            z-index: -1;
+        }
+
+        header {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(var(--blur-amount));
+            border-bottom: 1px solid rgba(174, 142, 93, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--card-transition);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .terminal-window {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .terminal-header {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terminal-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-secondary);
+        }
+
+        .terminal-content {
+            padding: 2rem;
+        }
+
+        .code-line {
+            margin: 1rem 0;
+            font-family: monospace;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .prompt {
+            color: var(--accent-primary);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .service-card {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: var(--card-transition);
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .deploy-button {
+            display: inline-block;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--card-transition);
+            margin-top: 1rem;
+        }
+
+        .deploy-button:hover {
+            background: var(--text-primary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 2rem 1rem;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="backdrop"></div>
+
+    <header>
+        <div class="logo">BUELLDOCS</div>
+        <nav class="nav-links">
+            <a href="/about">INTELLIGENCE</a>
+            <a href="/services">OPERATIONS</a>
+            <a href="/pricing">RESOURCES</a>
+            <a href="/register">ACCESS</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-title">MISSION.BRIEF</div>
+                    <div class="terminal-controls">
+                        <div class="terminal-control"></div>
+                        <div class="terminal-control"></div>
+                        <div class="terminal-control"></div>
+                    </div>
+                </div>
+                <div class="terminal-content">
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>NEED DOCUMENTS FAST? WE DELIVER IN 24-48 HOURS</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>• Custom Pay Stubs: $50</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>• W2 Forms: $75</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="prompt">></span>
+                        <span>• Bank Statements: $100</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>Pay Stubs</h3>
+                    <p>Professional pay stubs with complete accuracy</p>
+                    <a href="/deploy/paystubs" class="deploy-button">DEPLOY</a>
+                </div>
+                <div class="service-card">
+                    <h3>W2 Forms</h3>
+                    <p>Comprehensive W2 documentation</p>
+                    <a href="/deploy/w2" class="deploy-button">DEPLOY</a>
+                </div>
+                <div class="service-card">
+                    <h3>Bank Statements</h3>
+                    <p>Detailed bank statements with full transaction history</p>
+                    <a href="/deploy/bank" class="deploy-button">DEPLOY</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelectorAll('.deploy-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const service = e.target.getAttribute('href').split('/').pop();
+                window.location.href = `/register?service=${service}`;
+            });
+        });
+    </script>
+</body>
+</html>
